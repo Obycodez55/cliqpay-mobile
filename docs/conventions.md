@@ -29,3 +29,11 @@ Decisions about *how* we build, not *what* we build. Update this in place as rea
 
 - Files: kebab-case (matches the Expo scaffold's existing convention — `themed-text.tsx`, `use-color-scheme.ts`).
 - Components: PascalCase exports from kebab-case files.
+
+## Running E2E tests
+
+- [Maestro](https://maestro.mobile.dev/) — YAML flow scripts, runs against the Simulator, no native build config needed. See `docs/roadmap.md` (Phase 0) for why it was picked over Detox.
+- Flows live in `.maestro/` at the repo root, one `.yaml` file per flow.
+- To run a flow locally: start the dev server (`npx expo start`), then `maestro test .maestro/<flow>.yaml`.
+- The project has no native `ios`/`android` folders or bundle identifiers configured yet, so flows target the app through Expo Go rather than `launchApp` with a custom `appId`: `appId: host.exp.Exponent`, then `openLink` to the dev server's `exp://` URL. Switch to a real `appId` once the app has a dev client / native build.
+- Convention (per `docs/phase-playbook.md` step 3): every vertical-slice issue from Phase 1 onward ships its own `.maestro/<flow-name>.yaml` alongside the feature's screens/logic, not as separate follow-up work — the flow is part of what "done" means for that issue. `.maestro/smoke-app-launches.yaml` is the one throwaway exception, added in Phase 0 to prove the toolchain works before any real screens exist.

@@ -1,0 +1,26 @@
+# Throwaway Phase 0 smoke test: confirms the toolchain works end-to-end
+# (Expo dev server -> Expo Go -> Maestro) by launching the app and asserting
+# the scaffold's home screen actually rendered. Superseded by real per-feature
+# flows from Phase 1 onward (see docs/phase-playbook.md step 3).
+#
+# Run `npx expo start` first, then point this at the dev server's exp:// URL
+# (defaults to the local Metro bundler on the Simulator):
+#   maestro test .maestro/smoke-app-launches.yaml
+appId: host.exp.Exponent
+---
+- launchApp
+- openLink: "exp://127.0.0.1:8081"
+# Expo Go's first-run dev-menu tooltip: "Continue" advances it straight into the
+# actual dev menu rather than dismissing it, so a second tap (on the dimmed
+# backdrop, outside the menu sheet) is needed to close that too. Both optional
+# since neither appears on a warm relaunch.
+- tapOn:
+    text: "Continue"
+    optional: true
+- tapOn:
+    point: "50%,15%"
+    optional: true
+# Regex match ("." for the missing char) — the JSX source has a non-breaking
+# space (Welcome to&nbsp;Expo), which fails a literal-string assertVisible.
+- assertVisible: "Welcome to.Expo"
+- assertVisible: "Try editing"
