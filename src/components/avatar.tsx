@@ -37,7 +37,12 @@ export function Avatar({ imageUri, initials, size = 'medium' }: AvatarProps) {
 
   if (trimmedInitials) {
     return (
-      <View style={[containerStyle, { backgroundColor: theme.palette.violet[100] }]}>
+      <View
+        style={[
+          containerStyle,
+          { backgroundColor: theme.mode === 'dark' ? theme.palette.violet[800] : theme.palette.violet[100] },
+        ]}
+      >
         <Text
           style={{
             color: theme.mode === 'dark' ? theme.palette.violet[50] : theme.palette.violet[700],
