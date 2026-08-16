@@ -2,9 +2,11 @@
 
 # Cliqpay Mobile
 
-React Native (Expo) client for Cliqpay, a peer-to-peer wallet platform for Africa (Nigeria first). Consumes the `cliqpay` backend's API only — never talks to a database or payment provider directly. This repo is currently **scaffolding only**: no screens, design system, or data-layer decisions have been implemented yet. Design and planning come before implementation — see `docs/design-system.md` (not yet filled in) and confirm a plan with the user before writing feature code.
+React Native (Expo) client for Cliqpay, a peer-to-peer wallet platform for Africa (Nigeria first). Consumes the `cliqpay` backend's API only — never talks to a database or payment provider directly.
 
-See [docs/conventions.md](docs/conventions.md) for project structure and state-management patterns, [docs/design-system.md](docs/design-system.md) for the (currently placeholder) visual/motion language, and [docs/roadmap.md](docs/roadmap.md) for the phase plan.
+**Phase 0 (design foundations) is complete** — see [docs/roadmap.md](docs/roadmap.md) for the phase plan and current status. Design tokens, motion principles, and a core component set (`src/components/`: Button, TextInput, AmountInput, Avatar, StatusBadge, TransactionRow, BottomSheet, Toast, EmptyState) are decided and built — see [docs/design-system.md](docs/design-system.md), verified live in both iOS Simulator and Android Emulator, both themes. No real screens exist yet; Phase 1 (auth & identity) is next. Still design-then-build for anything new: confirm a plan with the user before writing feature code, same as before.
+
+See [docs/conventions.md](docs/conventions.md) for project structure, state-management patterns, and the local dev environment (Simulator/Emulator/Maestro setup already done on this machine — check there before reinstalling anything).
 
 ## The backend repo
 

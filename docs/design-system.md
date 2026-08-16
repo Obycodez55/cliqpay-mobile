@@ -1,6 +1,6 @@
 # Cliqpay Mobile — Design System
 
-**Status: foundations decided (§1), motion decided (§2).** Component inventory, copy voice, and screen inventory are still placeholders — filled in as each phase actually needs them, per `phase-playbook.md`.
+**Status: foundations decided (§1), motion decided (§2), Phase 0 component inventory built (§3).** Copy voice and screen inventory are still placeholders — filled in once Phase 1 actually needs them, per `phase-playbook.md`.
 
 Sections will fill in during the design phase, informed by reference apps (Cash App, Revolut, Wise, Kuda, Opay, PalmPay, Moniepoint, Apple Wallet/Pay — see [design-research.md](design-research.md)) and the `apple-design` + `emil-design-eng` skills for motion/interaction principles (§2).
 
@@ -113,17 +113,21 @@ Keep UI animation duration-equivalent (spring settle time) under ~300ms; press f
 
 ## 3. Component inventory
 
-Per component: states (default/pressed/disabled/loading/error), variants, and where it's used. Starting list to define once screens are scoped:
+Built in Phase 0 (issues #1-#6), all in `src/components/`, all theme-aware via `useAppTheme()`. Verified live in iOS Simulator and Android Emulator, light and dark.
 
-- Button
-- Amount input (numeric keypad entry)
-- Text input
-- Transaction row / list
-- Status badge (pending/success/failed)
-- Avatar / identity summary
-- Bottom sheet
-- Empty state
-- Toast / inline error
+| Component | States / variants | Notes |
+| --- | --- | --- |
+| `Button` (`button.tsx`) | `primary` / `secondary` variants; default, pressed (spring scale-down), disabled | Primary fill is `violet-700` light / `violet-500` dark; secondary is tinted fill, not outline |
+| `TextInput` (`text-input.tsx`) | default, focused, error (via `errorMessage` prop) | Focus border switches `violet-700` light / `violet-500` dark — a dark-mode contrast bug here was caught and fixed in #2's review |
+| `AmountInput` (`amount-input.tsx`) | single state, controlled value | Big-numeral display, `₦` prefix hardcoded (no multi-currency yet), native `decimal-pad` keyboard, no custom keypad UI |
+| `Avatar` / `AvatarStack` (`avatar.tsx`) | gradient default, `initials`, `imageUri`; stack with `+N` overflow badge | Gradient is `violet-500 → violet-700`; initials background is theme-aware (`violet-100` light / `violet-800` dark — a real dark-mode legibility bug here was caught and fixed in #6's review) |
+| `StatusBadge` (`status-badge.tsx`) | `pending` / `successful` / `failed` | Tint background + solid text per semantic token |
+| `TransactionRow` (`transaction-row.tsx`) | `sent` / `received` direction, composes `Avatar` + `StatusBadge` | Sent amounts stay neutral text (never red) per §1's `balance-negative` rule; received amounts use `success` green; long names truncate with ellipsis |
+| `BottomSheet` (`bottom-sheet.tsx`) | controlled `visible`/`onClose` | Full gesture contract from §2: 1:1 drag, interruptible, velocity handoff, rubber-banding past open, momentum-based dismissal, scrim, reduced-motion cross-fade. The most substantial component built so far |
+| `Toast` (`toast.tsx`) | controlled `visible`, auto-dismiss via `duration` prop | Spring enter/exit, never appears from `scale(0)` |
+| `EmptyState` (`empty-state.tsx`) | `icon` (ReactNode slot) / `title` / `subtitle` | Dashed-border card; `icon` is a slot rather than assuming an icon-set dependency (`@expo/vector-icons` isn't installed — see §"Iconography" above) |
+
+Not yet built: any screen-level composition, form validation patterns, list virtualization for long transaction histories — none of these were needed for Phase 0's throwaway demo screen (`src/app/demo.tsx`) and will get designed against Phase 1's real screens instead.
 
 ## 4. Copy voice
 

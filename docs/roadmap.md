@@ -6,6 +6,8 @@ Process for running each phase: [phase-playbook.md](phase-playbook.md).
 
 ## Phase 0 — Design foundations
 
+**Status: complete.** Shipped as GitHub issues #1-#6 (theme provider/tokens, input components, display components, overlay components, Maestro setup, demo screen). See `docs/design-system.md` §3 for the built component inventory. Phase 1 is next.
+
 **Goal:** A settled visual/motion language and a small set of verified core components, before any real screen gets built on top of them. No backend dependency.
 
 - Resolve the open forks from [design-research.md](design-research.md): light-first vs. dark-navy-primary theme, type scale, color tokens (including semantic tokens: success/error/warning, balance-positive/negative), spacing scale, motion primitives (spring configs, not raw durations)

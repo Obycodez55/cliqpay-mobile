@@ -8,7 +8,7 @@ Decisions about *how* we build, not *what* we build. Update this in place as rea
 - `src/features/<domain>/` — one folder per product domain (e.g. `wallet/`, `transfers/`, `requests/`, `auth/`). Each holds its own screens' logic, hooks, and API calls. A feature folder is the unit of ownership — if it's specific to one domain, it lives there, not in `src/components/` or `src/lib/`.
 - `src/components/` — shared, domain-agnostic UI primitives only (Button, Input, etc.). If a component only makes sense in one feature, it belongs in that feature folder instead.
 - `src/lib/` — cross-cutting infrastructure: API client, secure storage wrapper, query client setup. Not a dumping ground for anything that doesn't fit elsewhere — if it's growing past a handful of files, it's probably hiding a feature.
-- `src/constants/` — design tokens (colors, spacing, motion) once `docs/design-system.md` defines them.
+- `src/constants/` — design tokens (colors, spacing, motion), per `docs/design-system.md` §1.
 
 ## State management
 
@@ -23,12 +23,26 @@ Decisions about *how* we build, not *what* we build. Update this in place as rea
 
 ## Motion
 
-- `react-native-reanimated` + `react-native-gesture-handler` (already in the scaffold) for all non-trivial animation. Spring-based, not timing-based, as the default — see `docs/design-system.md` §2 once motion primitives are defined, and the `apple-design` skill for the underlying philosophy.
+- `react-native-reanimated` + `react-native-gesture-handler` (already in the scaffold) for all non-trivial animation. Spring-based, not timing-based, as the default — see `docs/design-system.md` §2 for the concrete defaults, and the `apple-design` skill for the underlying philosophy.
 
 ## Naming
 
 - Files: kebab-case (matches the Expo scaffold's existing convention — `themed-text.tsx`, `use-color-scheme.ts`).
 - Components: PascalCase exports from kebab-case files.
+
+## Local dev environment
+
+State of this specific machine as of Phase 0 — check here before reinstalling anything:
+
+- **iOS**: Xcode + a real Simulator runtime (iOS 26.4) are installed. Any booted Simulator works; the Simulator tool's `attach` action finds it.
+- **Android**: no Android Studio (its first-run setup needs an interactive GUI wizard nothing here can drive) — instead, just the pieces that give a working `adb`/`emulator`, installed via Homebrew:
+  - JDK: `brew install openjdk` (non-cask formula, no `sudo` — the cask `temurin` needs `sudo` and will fail non-interactively) at `/opt/homebrew/opt/openjdk`
+  - Android SDK command-line tools: `brew install --cask android-commandlinetools` at `/opt/homebrew/share/android-commandlinetools` (`ANDROID_HOME`)
+  - `platform-tools`, `emulator`, `platforms;android-35`, and `system-images;android-35;google_apis;arm64-v8a` installed via that SDK's `sdkmanager` — the system image is a ~1.7GB download that `sdkmanager`'s own downloader stalls on unreliably; a direct `curl -L -C -` (resumable) to `dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-35_r09.zip`, unzipped into place, worked when `sdkmanager` didn't
+  - An AVD named `Cliqpay_Pixel` (Pixel 7, the above system image) already exists — `emulator -avd Cliqpay_Pixel` boots it, no need to `avdmanager create` again
+  - `JAVA_HOME`/`ANDROID_HOME` and their `bin` dirs are exported in `~/.zshrc` — a fresh shell should already have `java`/`adb`/`emulator`/`sdkmanager`/`avdmanager` on `PATH`
+- **Maestro**: installed via its own official installer (`get.maestro.mobile.dev`) to `~/.maestro/bin`, which self-added to `~/.zshrc`/`~/.bash_profile`. Needs `java` on `PATH` to run (see above).
+- Both platforms' Expo Go client get fetched and installed automatically by `npx expo start --ios` / `--android` — no manual APK/build wrangling needed, but the client only supports the project's exact SDK version (57), so a public/cached Expo Go APK downloaded another way may not match.
 
 ## Running E2E tests
 
