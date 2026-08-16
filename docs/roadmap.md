@@ -22,7 +22,7 @@ Process for running each phase: [phase-playbook.md](phase-playbook.md).
 
 Screens/flows:
 - Onboarding (value prop, not account-specific)
-- Register (email/password or whatever the backend's actual endpoint shape is — confirm against `cliqpay`'s auth module before designing the form)
+- Register (confirm the exact request/response shape against the backend's live spec — `/doc` or `/reference` on the running `cliqpay` dev server — before designing the form, not against this doc's guess)
 - Email verification (code entry)
 - Login
 - MFA challenge (email mandatory per backend; TOTP if enrolled)
@@ -40,7 +40,7 @@ Depends on backend: `auth` module (register/login/logout/refresh, email verifica
 **Goal:** A user can fund their wallet via Kora and see it reflected.
 
 Screens/flows:
-- Add money (amount entry → Kora checkout handoff, likely a WebView or in-app browser flow — needs a decision on Kora's actual redirect/webview shape)
+- Add money (amount entry → Kora checkout handoff, likely a WebView or in-app browser flow — check the backend's `payments` module / `KoraAdapter` source at `../cliqpay` for what the initialization endpoint actually returns before deciding the handoff shape)
 - Funding pending/result states (success, failed, still-processing — Kora funding is webhook-driven, so the client needs an honest "we're waiting to hear back" state, not just optimistic success)
 - Transaction history (paginated list, funding transactions only at this point)
 - Transaction detail (single funding transaction)

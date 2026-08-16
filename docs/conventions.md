@@ -17,8 +17,8 @@ Decisions about *how* we build, not *what* we build. Update this in place as rea
 
 ## API layer
 
-- The NestJS backend (`cliqpay` repo) is the only source of truth. This app never talks to Postgres, Kora, or any provider directly.
-- Typed client generated from the backend's OpenAPI spec where possible, rather than hand-written request/response types that can drift.
+- The NestJS backend (`cliqpay` repo, sibling directory at `../cliqpay` — see `CLAUDE.md`) is the only source of truth. This app never talks to Postgres, Kora, or any provider directly.
+- The backend already serves a live OpenAPI spec (raw JSON at `/doc`, browsable at `/reference`, when its dev server is running) with every controller tagged/documented. Generate a typed client from that spec rather than hand-writing request/response types that can drift — the tooling choice (e.g. `openapi-typescript`) is still open, but the source of truth for the shape is the running spec, not a summary of it.
 - Auth tokens stored via `expo-secure-store`, never `AsyncStorage` — this is a wallet app.
 
 ## Motion
