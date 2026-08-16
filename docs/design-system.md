@@ -70,7 +70,7 @@ Scale with the user's system text-size setting (Dynamic Type / Android font scal
 
 ### Iconography
 
-`@expo/vector-icons` (already available in the Expo scaffold, no new dependency) as the default icon set — revisit only if a specific icon it lacks becomes a real blocker. Icon-only tab bar (per the reference-app research, §"Cross-app patterns" in `design-research.md`) rather than labeled tabs, matching Cash App/Revolut's minimal-chrome approach.
+`@expo/vector-icons` as the default icon set — **not actually installed** in this scaffold (verified during Phase 0 issue #4; only `expo-symbols` is present, which is SF Symbols/iOS-only, no cross-platform equivalent). Add `@expo/vector-icons` as a real dependency once a component genuinely needs a rendered icon rather than an accepted `ReactNode` slot — `EmptyState`'s `icon` prop is intentionally a slot for this reason, not a hardcoded icon-set dependency. Icon-only tab bar (per the reference-app research, §"Cross-app patterns" in `design-research.md`) rather than labeled tabs, matching Cash App/Revolut's minimal-chrome approach.
 
 ## 2. Motion
 
