@@ -7,6 +7,25 @@ import '@/global.css';
 
 import { Platform } from 'react-native';
 
+import { darkColors, lightColors, terracotta, violetColors, type ThemeColors } from '@/constants/colors';
+import { spacing, type SpacingScale } from '@/constants/spacing';
+import { typography, type TypographyScale } from '@/constants/typography';
+
+export type ThemeMode = 'light' | 'dark';
+
+export type Theme = {
+  mode: ThemeMode;
+  colors: ThemeColors;
+  typography: TypographyScale;
+  spacing: SpacingScale;
+  palette: { violet: typeof violetColors; terracotta: typeof terracotta };
+};
+
+const palette = { violet: violetColors, terracotta };
+
+export const lightTheme: Theme = { mode: 'light', colors: lightColors, typography, spacing, palette };
+export const darkTheme: Theme = { mode: 'dark', colors: darkColors, typography, spacing, palette };
+
 export const Colors = {
   light: {
     text: '#000000',
