@@ -1,0 +1,67 @@
+# Phase 1 issue #7 — first-run onboarding carousel.
+#
+# Run `npx expo start` first, then point this at the dev server's exp:// URL:
+#   maestro test .maestro/onboarding.yaml
+#
+# Limitation: Maestro's `launchApp` on Expo Go relaunches the *Expo Go* process, not this
+# project's JS bundle in isolation, and `clearState` isn't meaningful against Expo Go's own
+# storage (the app under test's AsyncStorage lives inside Expo Go's sandbox, not a dedicated
+# app container Maestro can reset per-run without also wiping other Expo Go projects' data).
+# So the "relaunch after completing onboarding skips straight past it" assertion below is done
+# by re-navigating to the same exp:// URL within the same run rather than a real process
+# relaunch — that re-mounts the root layout and re-reads the persisted flag the same way a cold
+# launch would, which is what actually exercises the code path this issue cares about. A true
+# cold-relaunch check needs a dev-client/standalone build with a real appId (see
+# docs/conventions.md's E2E section) and is a manual check until then.
+appId: host.exp.Exponent
+---
+- launchApp
+- openLink: "exp://127.0.0.1:8081"
+- tapOn:
+    text: "Continue"
+    optional: true
+- tapOn:
+    point: "50%,15%"
+    optional: true
+
+# First launch shows onboarding, slide 1.
+- assertVisible: "Send money in seconds"
+- assertVisible: "Log in"
+
+# "Log in" is reachable from slide 1, independent of Skip.
+- tapOn: "Log in"
+- assertVisible: "Log in"
+- back
+
+# Swipe through slides normally — dots/position should advance one at a time.
+- assertVisible: "Send money in seconds"
+- swipe:
+    start: "90%,50%"
+    end: "10%,50%"
+- assertVisible: "Your wallet, secured"
+- swipe:
+    start: "90%,50%"
+    end: "10%,50%"
+- assertVisible: "No fees between friends"
+- assertVisible: "Get Started"
+
+# Back to slide 1 to test Skip jumping straight to the last slide (not past onboarding).
+- swipe:
+    start: "10%,50%"
+    end: "90%,50%"
+- swipe:
+    start: "10%,50%"
+    end: "90%,50%"
+- assertVisible: "Send money in seconds"
+- tapOn: "Skip"
+- assertVisible: "No fees between friends"
+- assertVisible: "Get Started"
+
+# Completing onboarding sets the persisted flag and navigates to Register.
+- tapOn: "Get Started"
+- assertVisible: "Create account"
+
+# Re-navigating to the dev server URL re-mounts the root layout and re-reads the flag — the
+# closest same-run proxy for "a relaunch skips straight past onboarding" (see note above).
+- openLink: "exp://127.0.0.1:8081"
+- assertNotVisible: "Send money in seconds"
